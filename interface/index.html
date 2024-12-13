@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <!-- HEAD Section -->
+    <head>
+        <!-- init TAGS -->
+        <title>Emilios Box</title>
+
+        <!-- Meta TAGS -->
+        <meta charset="UTF-8">
+        <meta name="author" content="Gafelson">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="OTP SMS Sender Tool by Gafelson">
+
+        <!-- Link TAGS -->
+        <link rel="stylesheet" href="assets/css/_normalize.css">
+        <link rel="stylesheet" href="assets/css/_core.css">
+
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+    </head>
+
+    <!-- BODY Section -->
+    <body class="theme" id="app">
+        <div class="system">
+            <div class="hall">
+                <header id="ascii" class="header">
+                    <div class="info">
+                        <p>[+] OTP SMS Sender (IR 𓄂𓆃)</p>
+                        <p>[+] Design by Gafelson</p>
+                        <p>[+] Soheil Fouladvandi</p>
+                    </div>
+                    <p id="time" style="padding: 1rem 0"></p>
+                </header>
+
+                <div class="mode">
+                    <p id="status">OFFLINE</p>
+                    <label class="switch">
+                        <input type="checkbox" id="toggleSwitch">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="show-alert" id="alert">
+                    <div class="ascii-warning">
+                        <p>─────█─▄▀█──█▀▄─█─────</p>
+                        <p>────▐▌──────────▐▌────</p>
+                        <p>────█▌▀▄──▄▄──▄▀▐█────</p>
+                        <p>───▐██──▀▀──▀▀──██▌───</p>
+                        <p>──▄████▄──▐▌──▄████▄──</p>
+                    </div>
+                    <p class="warning-text">
+                        ⚠︎ You're now experiencing the <b>LIVE VERSION!</b> Please note: This is for educational purposes only.
+                    </p>
+                </div>
+            </div>
+
+            <form id="smsForm">
+                <label for="phoneNumber">Target Phone Number:</label>
+                <input
+                    type="tel"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    placeholder="CellPhone"
+                    required
+                    pattern="^\d{10}$"
+                >
+
+                <label for="vol" id="rangeLabel">Number of SMS P/service (Attempts: 20)</label>
+                <input
+                    type="range"
+                    id="vol"
+                    name="vol"
+                    min="1"
+                    max="50"
+                    value="20"
+                >
+
+                <button type="submit">Launching Attack</button>
+                <p id="open" style="padding-bottom: 2rem">~ View Logs ~</p>
+            </form>
+        </div>
+
+        <div id="logs">
+            <div class="top-sidebar">
+                <div class="top-sidebar-item">
+                    <p id="close">ㄨ</p>
+                    <p>💤</p>
+                </div>
+            </div>
+            <div class="devider"></div>
+            <div class="logging"></div>
+            <div class="log-content"></div>
+        </div>
+
+        <icon>ⓘ</icon>
+        <!-- Scripts -->
+        <script src="assets/js/_app.js"></script>
+    </body>
+</html>
