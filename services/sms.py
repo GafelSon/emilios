@@ -1,5 +1,6 @@
 import re
 import logging
+from urllib.parse import urlparse
 from urllib3 import PoolManager, encode_multipart_formdata
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from config import settings
@@ -9,6 +10,7 @@ class SMSService:
         self._setup_logging()
         self._http_client = PoolManager()
         self._targets = settings.SMS_TARGETS
+        self._body_templates = settings.SMS_BODY_TEMPLATES
 
     def _setup_logging(self):
         logging.basicConfig(
@@ -20,12 +22,28 @@ class SMSService:
     def _validation(self, phone: str) -> bool:
         return bool(re.match(r'^9\d{9}$', phone))
 
+    def _get_body_template(self, url: str) -> dict:
+        if url in self._body_templates:
+            return self._body_templates[url]
+
+        for template_url, body_template in self._body_templates.items():
+            if template_url in url:
+                return body_template
+
+        return self._body_templates.get('default', {'phone': '0{phone}'})
+
     def _send(self, phone: str, url: str, offline: bool = False) -> dict:
         if offline:
             self.logger.info(f"OFFLINE: Send SMS -> +98{phone} via {url}")
             return {"url": url, "status": "offline", "success": True}
         try:
-            meo = encode_multipart_formdata({"phone": f"0{phone}"})
+            body_template = self._get_body_template(url)
+            formatted_body = {
+                k: v.format(phone=phone) if isinstance(v, str) else v
+                for k, v in body_template.items()
+            }
+
+            meo = encode_multipart_formdata(formatted_body)
             res = self._http_client.request(
                 "POST",
                 url,
@@ -33,6 +51,7 @@ class SMSService:
                 body=meo[0],
                 timeout=2.0
             )
+
             success = 200 <= res.status < 300
             log_method = self.logger.info if success else self.logger.warning
             log_method(f"SMS to {phone} via {url} : {res.status}")
@@ -40,6 +59,7 @@ class SMSService:
                 "url": url,
                 "status": res.status,
                 "success": success,
+                "body": formatted_body
             }
         except Exception as e:
             self.logger.error(f"Failed Send To SMS 0{phone} : {e}")

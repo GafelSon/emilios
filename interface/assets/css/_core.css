@@ -202,9 +202,10 @@ form {
     backdrop-filter: blur(12px);
     position: absolute;
     transition:
-        transform 0.25s ease-out,
-        opacity 0.25s ease-out;
-    transform: translateX(550px);
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(100%);
     border-left: 1px solid #ffffff30;
     opacity: 0;
 

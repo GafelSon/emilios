@@ -152,7 +152,19 @@ document.addEventListener("DOMContentLoaded", () => {
         logsContainer.classList.add(isOpen ? "opened" : "closed");
     }
     closeButton.addEventListener("click", () => toggleLogs(false));
-    openButton.addEventListener("click", () => toggleLogs(true));
+    openButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleLogs(true);
+    });
+    function isOpen() {
+        return logsContainer.classList.contains("opened");
+    }
+    function handleOutsideClick(event) {
+        if (isOpen() && !logsContainer.contains(event.target)) {
+            toggleLogs(false);
+        }
+    }
+    document.addEventListener("click", handleOutsideClick);
 
     function checkAndAddPlaceholder() {
         if (!loggingDiv.innerHTML.trim()) {
