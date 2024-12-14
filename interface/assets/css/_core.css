@@ -197,6 +197,7 @@ form {
     width: 40%;
     height: 100dvh;
     right: 0;
+    overflow-y: auto;
     visibility: hidden;
     background: #000000d9;
     backdrop-filter: blur(12px);
@@ -255,9 +256,8 @@ form {
 .logging {
     width: 100%;
     padding: 0 1rem;
+    max-height: 90%;
     overflow: auto;
-    height: 100%;
-    overlay: auto;
 }
 
 .emp-log {
@@ -420,4 +420,50 @@ icon {
     position: absolute;
     bottom: 20px;
     left: 20px;
+}
+
+.animation-log {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    border-right: 2px solid currentColor;
+    animation: typewriter 2s steps(30) forwards;
+}
+
+.blinking-cursor {
+    animation: blinkCursor 0.6s step-end infinite;
+}
+
+.list-glitch {
+    glitch 0.5s infinite alternate;
+}
+
+@keyframes typewriter {
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes blinkCursor {
+    50% {
+        border-color: transparent;
+    }
+}
+
+@keyframes glitch {
+    0% {
+        text-shadow: 2px 2px 0 #ff00ff, -2px -2px 0 #00ffff;
+    }
+
+    25% {
+        text-shadow: -2px 2px 0 #ff00ff, 2px -2px 0 #00ffff;
+    }
+
+    50% {
+        text-shadow: 2px -2px 0 #ff00ff, -2px 2px 0 #00ffff;
+    }
+
+    100% {
+        text-shadow: -2px -2px 0 #ff00ff, 2px 2px 0 #00ffff;
+    }
 }

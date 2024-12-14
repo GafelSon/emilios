@@ -94,7 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeButton = document.getElementById("close");
     const openButton = document.getElementById("open");
     const loggingDiv = document.querySelector(".logging");
-    const loggingContent = document.querySelector(".log-content");
     const form = document.querySelector("form");
     const phoneInput = form.querySelector('input[placeholder="CellPhone"]');
     const timeElement = document.getElementById("time");
@@ -210,6 +209,25 @@ document.addEventListener("DOMContentLoaded", () => {
     )
     );
 
+    function dispLogAnimation(logDiv, logs, logClass) {
+        logs.forEach((log, index) => {
+            setTimeout(() => {
+                const logElement = document.createElement("p");
+                logElement.textContent = log;
+                logElement.classList.add("animation-log");
+                logElement.classList = toggleSwitch.checked ? "list-glitch" : " "
+                logDiv.appendChild(logElement);
+                logElement.addEventListener("animationend", (event) => {
+                    if (event.animationName === "typewriter") {
+                        logElement.classList.remove("animation-log");
+                        logElement.classList.add("blinking-cursor");
+                    }
+                });
+                loggingDiv.scrollTop = loggingDiv.scrollHeight;
+            }, index * 100);
+        });
+    }
+
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
         loggingDiv.innerHTML = "";
@@ -236,37 +254,22 @@ document.addEventListener("DOMContentLoaded", () => {
             toggleLogs(true);
 
             if (result.success) {
-                // Log details
-                result.details.forEach((detail) => {
-                    const detailLog = document.createElement("p");
-                    detailLog.textContent = `[*] ${detail.url}:${detail.status}`;
-                    detailLog.classList.add("detail-log");
-                    loggingDiv.appendChild(detailLog);
+                const successLogs = result.details.map(
+                    (detail) => `[*] ${detail.url}:${detail.status}`
+                );
+                const successMessage = `[+] Success: ${result.message}`;
+                successLogs.push(successMessage);
 
-                    // Log success
-                    const successLog = document.createElement("p");
-                    successLog.classList.add("success-log");
-                    successLog.textContent = `[+] Success: ${result.message}`;
-                    loggingDiv.appendChild(successLog);
-                });
-
-
+                dispLogAnimation(loggingDiv, successLogs, "success-log");
             } else {
-                // Log error
-                const errorLog = document.createElement("p");
-                errorLog.classList.add("error-log");
-                errorLog.textContent = `[!] Error: ${result.message}`;
-                loggingDiv.appendChild(errorLog);
+                const errorLog = `[!] Error: ${result.message}`;
+                dispLogAnimation(loggingDiv, [errorLog], "error-log");
             }
+            loggingDiv.style.display = "block";
 
-            loggingDiv.style.display = "block";
         } catch (error) {
-            // Log network error
-            const networkErrorLog = document.createElement("p");
-            networkErrorLog.classList.add("error-log");
-            networkErrorLog.textContent = `[!] Network Error: ${error.message}`;
-            loggingDiv.appendChild(networkErrorLog);
-            loggingDiv.style.display = "block";
+            const networkErrorLog = `[!] Network Error: ${error.message}`;
+            dispLogAnimation(loggingDiv, [networkErrorLog], "error-log");
         }
     });
 });

@@ -20,7 +20,6 @@ app.add_middleware(
 )
 app.mount("/assets", StaticFiles(directory="interface/assets"), name="assets")
 app.mount("/interfave", StaticFiles(directory="interface"), name="interface")
-
 sms_service = SMSService()
 @app.post("/send-sms", response_model=SMSResponseSchema)
 async def send_sms(request: SMSRequestSchema):
